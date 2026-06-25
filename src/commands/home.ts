@@ -15,7 +15,7 @@ const issueSchema = [
 ]
 
 export async function homeCommand(_args: string[], ctx: JiraContext | undefined): Promise<string> {
-  const projectJql = ctx?.project ? ` AND project = ${ctx.project}` : ''
+  const projectJql = ctx?.project ? ` AND project = "${ctx.project}"` : ''
   const jql = `assignee = currentUser() AND statusCategory != Done${projectJql} ORDER BY updated DESC`
 
   const issueResult = await acliJson(['jira', 'workitem', 'search', '--jql', jql, '--json', '--limit', '5']).catch(() => [])

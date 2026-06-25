@@ -66,7 +66,7 @@ async function issueList(args: string[], ctx: JiraContext | undefined): Promise<
   let jql = rawJql
   if (!jql) {
     const parts: string[] = []
-    if (project) parts.push(`project = ${project}`)
+    if (project) parts.push(`project = "${project}"`)
     if (mine) parts.push('assignee = currentUser()')
     if (assignee) parts.push(`assignee = "${assignee}"`)
     if (status) parts.push(`status = "${status}"`)

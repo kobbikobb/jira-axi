@@ -22,7 +22,12 @@
     "axi",
     "toon"
   ],
+  "author": "Jakob Jónasson <jakob.jonasson@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/kobbikobb/jira-axi#readme",
+  "bugs": {
+    "url": "https://github.com/kobbikobb/jira-axi/issues"
+  },
   "dependencies": {
     "@toon-format/toon": "^2.1.0",
     "axi-sdk-js": "^0.1.7"
@@ -34,6 +39,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jakobjonasson/jira-axi.git"
+    "url": "git+https://github.com/kobbikobb/jira-axi.git"
   }
 }

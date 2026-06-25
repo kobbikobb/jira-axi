@@ -36,6 +36,6 @@ export function main(): void {
     commands: COMMANDS,
     home: homeCommand,
     getCommandHelp: (cmd) => HELP[cmd] ?? null,
-    resolveContext: ({ args }) => resolveContext({ command: undefined, args: stripProjectArgs([...args]) }) as JiraContext,
+    resolveContext: ({ args }) => resolveContext({ command: undefined, args }) as JiraContext,
   })
 }

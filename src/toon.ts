@@ -44,9 +44,6 @@ export function renderList(label: string, items: Record<string, any>[], schema: 
   return encode({ [label]: items.map(item => extract(item, schema)) })
 }
 
-export function renderDetail(label: string, item: Record<string, any>, schema: FieldDef[]): string {
-  return encode({ [label]: extract(item, schema) })
-}
 
 export function renderHelp(lines: string[]): string {
   if (!lines.length) return ''
