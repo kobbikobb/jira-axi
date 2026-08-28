@@ -1,6 +1,6 @@
 import { encode } from '@toon-format/toon'
 import { AxiError } from 'axi-sdk-js'
-import { acliJson, unwrapValues } from '../acli.js'
+import { acliJson, assertBatchSuccess, unwrapValues } from '../acli.js'
 import { takeFlag, takeBoolFlag, getPositional } from '../args.js'
 import type { JiraContext } from '../context.js'
 import { stripProjectArgs } from '../context.js'
@@ -156,7 +156,8 @@ async function issueComment(args: string[]): Promise<string> {
   const body = takeFlag(args, '--body') ?? takeFlag(args, '-b')
   if (!body) throw new AxiError('--body/-b is required', 'VALIDATION_ERROR')
 
-  await acliJson(['jira', 'workitem', 'comment', 'create', '--key', key, '--body', body, '--json'])
+  const result = await acliJson(['jira', 'workitem', 'comment', 'create', '--key', key, '--body', body, '--json'])
+  assertBatchSuccess(result, `comment on ${key}`)
 
   return renderOutput([
     encode({ commented: { key } }),
@@ -170,7 +171,8 @@ async function issueTransition(args: string[]): Promise<string> {
   const status = takeFlag(args, '--status') ?? takeFlag(args, '-s')
   if (!status) throw new AxiError('--status/-s is required', 'VALIDATION_ERROR')
 
-  await acliJson(['jira', 'workitem', 'transition', '--key', key, '--status', status, '--json', '--yes'])
+  const result = await acliJson(['jira', 'workitem', 'transition', '--key', key, '--status', status, '--json', '--yes'])
+  assertBatchSuccess(result, `move ${key} to "${status}"`)
 
   return renderOutput([
     encode({ transitioned: { key, status } }),

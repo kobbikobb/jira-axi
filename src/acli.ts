@@ -1,5 +1,6 @@
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
+import { AxiError } from 'axi-sdk-js'
 import { mapCliError } from './errors.js'
 
 const exec = promisify(execFile)
@@ -27,4 +28,13 @@ export function unwrapValues<T>(result: any): { items: T[]; total: number; isLas
   if (Array.isArray(result)) return { items: result, total: result.length, isLast: true }
   const items = result.values ?? result.comments ?? result.issues ?? []
   return { items, total: result.total ?? items.length, isLast: result.isLast ?? true }
+}
+
+export function assertBatchSuccess(result: any, action: string): void {
+  const results = result?.results
+  if (!Array.isArray(results)) return
+  const failed = results.filter((r: any) => r?.status === 'FAILURE')
+  if (!failed.length) return
+  const detail = failed.map((r: any) => `${r.id}: ${r.message}`).join('; ')
+  throw new AxiError(`Could not ${action} — ${detail}`, 'ACLI_ERROR')
 }
