@@ -36,6 +36,7 @@ jira-axi issue list --jql "sprint in openSprints() AND assignee = currentUser()"
 jira-axi issue view TEAM-123
 jira-axi issue view TEAM-123 --full
 jira-axi issue create --project TEAM --summary "Fix login bug" --type Bug
+jira-axi issue create --project TEAM --summary "Nested work" --type Story --parent TEAM-456
 jira-axi issue comment TEAM-123 --body "Investigated, root cause is X"
 jira-axi issue transition TEAM-123 --status "In Progress"
 
