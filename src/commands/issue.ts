@@ -16,7 +16,7 @@ flags{list}:
 flags{view}:
   --full (show complete description)
 flags{create}:
-  --project/-p <KEY> (required), --summary/-s <text> (required), --type/-t <type> (default Story), --description/-d <text>, --assignee/-a <email>
+  --project/-p <KEY> (required), --summary/-s <text> (required), --type/-t <type> (default Story), --description/-d <text>, --assignee/-a <email>, --parent <KEY>
 flags{comment}:
   --body/-b <text> (required)
 flags{transition}:
@@ -26,6 +26,7 @@ examples:
   jira-axi issue list --mine
   jira-axi issue view TEAM-123
   jira-axi issue create --project TEAM --summary "Fix login bug" --type Bug
+  jira-axi issue create --project TEAM --summary "Nested work" --type Story --parent TEAM-456
   jira-axi issue comment TEAM-123 --body "Looking into this"
   jira-axi issue transition TEAM-123 --status "Done"
 `.trim()
@@ -132,6 +133,7 @@ async function issueCreate(args: string[], ctx: JiraContext | undefined): Promis
   const type = takeFlag(args, '--type') ?? takeFlag(args, '-t') ?? 'Story'
   const description = takeFlag(args, '--description') ?? takeFlag(args, '-d')
   const assignee = takeFlag(args, '--assignee') ?? takeFlag(args, '-a')
+  const parent = takeFlag(args, '--parent')
 
   if (!project) throw new AxiError('--project/-p is required', 'VALIDATION_ERROR', ['Set JIRA_AXI_PROJECT env var or pass --project KEY'])
   if (!summary) throw new AxiError('--summary/-s is required', 'VALIDATION_ERROR')
@@ -139,6 +141,7 @@ async function issueCreate(args: string[], ctx: JiraContext | undefined): Promis
   const acliArgs = ['jira', 'workitem', 'create', '--project', project, '--summary', summary, '--type', type, '--json']
   if (description) acliArgs.push('--description', description)
   if (assignee) acliArgs.push('--assignee', assignee)
+  if (parent) acliArgs.push('--parent', parent)
 
   const result = await acliJson(acliArgs)
   const key = result.key ?? result.id
